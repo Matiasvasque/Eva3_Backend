@@ -8,3 +8,7 @@ venv/
 *.sqlite3
 .venv/
 env/
+
+*.sqlite3
+.venv/
+env/
