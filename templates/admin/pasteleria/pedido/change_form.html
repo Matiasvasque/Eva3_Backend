@@ -1,0 +1,28 @@
+{% extends "admin/change_form.html" %}
+{% block extrastyle %}{{ block.super }}
+<style>
+  .progreso{display:flex;gap:6px;margin:6px 0 16px;flex-wrap:wrap}
+  .progreso .paso{padding:6px 16px;border-radius:999px;font-size:12px;background:#f1e6d6;color:#8a7263}
+  .progreso .paso-hecho{background:#6f9455;color:#fff}
+  .progreso .paso-actual{background:#3b2418;color:#fffdf8;font-weight:600}
+  .bom-resumen{border:1px solid #f1e6d6;border-radius:16px;padding:12px 18px;margin-bottom:16px;background:#fffdf8;box-shadow:0 10px 15px -3px rgba(59,36,24,.10)}
+  .bom-resumen li{margin:2px 0}
+</style>
+{% endblock %}
+{% block form_top %}
+{{ block.super }}
+{% if pasos %}
+<div class="progreso">
+  {% for p in pasos %}<span class="paso paso-{{ p.clase }}">{{ p.nombre }}</span>{% endfor %}
+</div>
+<div class="bom-resumen">
+  <strong>🧾 Lista de materiales (BOM) del pedido</strong>
+  {% if bom_resumen %}
+  <ul>{% for l in bom_resumen %}
+    <li>{{ l.cantidad }} {{ l.insumo.unidad_medida }} de <b>{{ l.insumo.nombre }}</b>
+        — stock actual: {{ l.insumo.stock_disponible }}</li>{% endfor %}
+  </ul>
+  {% else %}<p>Sin insumos aún. Agrégalos en la sección inferior antes de pasar a «En Preparación».</p>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "admin/index.html" %}
+{% comment %}
+  Inicio del Django Admin con tarjetas de resumen (pedidos activos, atrasados, stock bajo y entregas de hoy).
+  Los datos (`kpis`) los agrega pasteleria/admin.py al contexto de la vista de inicio.
+{% endcomment %}
+{% block content %}
+{% if kpis %}
+<div class="kpis">
+  {% for k in kpis %}
+  <div class="kpi" style="--c:{{ k.color }}"><b>{{ k.valor }}</b><span>{{ k.nombre }}</span></div>
+  {% endfor %}
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

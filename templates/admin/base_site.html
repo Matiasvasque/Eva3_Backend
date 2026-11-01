@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+{% comment %}
+  Template personalizado del Django Admin: marca "Dulce Arte" y paleta crema / chocolate / rosa / dorado.
+  Sobrescribe admin/base_site.html (se encuentra primero porque TEMPLATES['DIRS'] apunta a /templates).
+  También estiliza el login, el inicio, las tablas, los filtros y los formularios del admin.
+{% endcomment %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Dulce Arte{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#3b2418; --secondary:#5a3a28; --accent:#c9a24b;
+    --header-bg:#3b2418; --header-color:#e4d3c6; --header-branding-color:#fff; --header-link-color:#fff;
+    --breadcrumbs-bg:#5a3a28; --breadcrumbs-fg:#e4d3c6; --breadcrumbs-link-fg:#fff;
+    --link-fg:#5a3a28; --link-hover-color:#b5506a; --link-selected-fg:#5a3a28;
+    --body-bg:#fbf6ee; --darkened-bg:#f6ebcb;
+    --button-bg:#3b2418; --button-hover-bg:#5a3a28; --default-button-bg:#6f9455; --default-button-hover-bg:#4f6f3b;
+    --object-tools-bg:#c9a24b; --object-tools-hover-bg:#a8842f;
+    --selected-row:#f6ebcb; --hairline-color:#f1e6d6; --border-color:#f1e6d6;
+    --font-family-primary:'Poppins','Segoe UI',system-ui,sans-serif;
+    --sombra:0 10px 15px -3px rgba(59,36,24,.10),0 4px 6px -4px rgba(59,36,24,.08);
+  }
+  /* Paleta siempre clara: evita texto claro sobre fondos claros cuando el navegador está en modo oscuro */
+  :root,html[data-theme="light"],html[data-theme="dark"],html[data-theme="auto"]{
+    color-scheme:light;
+    --body-fg:#3b2418; --body-bg:#fbf6ee; --body-quiet-color:#8a7263; --body-medium-color:#5a3a28; --body-loud-color:#3b2418;
+    --darkened-bg:#f6ebcb; --selected-bg:#f6ebcb; --selected-row:#f6ebcb; --border-color:#f1e6d6; --hairline-color:#f1e6d6;
+    --error-fg:#b3243b; --message-success-bg:#e3f1dc; --message-warning-bg:#fff3cd; --message-error-bg:#fde2e4;
+    --close-button-bg:#8a7263; --close-button-hover-bg:#5a3a28;
+  }
+  .theme-toggle{display:none!important}
+  input[type=text],input[type=number],input[type=password],input[type=email],input[type=url],input[type=datetime-local],input[type=date],input[type=time],select,textarea{color:#3b2418;background-color:#fffdf8}
+  input::placeholder,textarea::placeholder{color:#a89485}
+  body{background:radial-gradient(50% 35% at 90% 0%,rgba(244,199,207,.5),transparent 70%),#fbf6ee;background-attachment:fixed}
+
+  /* --- Cabecera --- */
+  #header{padding:14px 30px;box-shadow:0 6px 24px rgba(59,36,24,.18)}
+  #site-name a{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:1.4rem;letter-spacing:-.01em}
+  #user-tools{font-size:.8rem}
+  div.breadcrumbs{padding:10px 30px}
+  h1,.module h2,.module caption{font-family:'Playfair Display',Georgia,serif}
+  #content h1{color:#3b2418;font-size:1.9rem}
+
+  /* --- Tarjetas (módulos) --- */
+  .module{border-radius:18px;overflow:hidden;border:1px solid #f1e6d6;background:#fffdf8;box-shadow:var(--sombra);transition:box-shadow .35s,transform .35s}
+  #content-main .module:hover{box-shadow:0 20px 30px -10px rgba(59,36,24,.25);transform:translateY(-3px)}
+  .module h2,.module caption{background:linear-gradient(135deg,#5a3a28,#3b2418);color:#fff;font-size:1.05rem;padding:11px 16px}
+  .module caption a.section{color:#fff}
+  .module td,.module th{padding:9px 14px}
+  .module th a{font-weight:500}
+  tr:hover td,tr:hover th{background:#fbf3dc}
+  .addlink,.changelink{font-weight:500}
+
+  /* --- Listados --- */
+  #changelist-form .results{border-radius:16px;overflow:hidden;border:1px solid #f1e6d6;background:#fffdf8;box-shadow:var(--sombra)}
+  thead th{background:#f6ebcb;color:#3b2418;border-bottom:1px solid #e9d9b0}
+  thead th a{color:#3b2418}
+  #changelist-filter{border-radius:18px;overflow:hidden;background:#fffdf8;border:1px solid #f1e6d6;box-shadow:var(--sombra)}
+  #changelist-filter h2{background:#f6ebcb;color:#3b2418;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
+  #changelist-filter li.selected a{color:#b5506a;font-weight:600}
+  #changelist-search input[type=text]{padding:8px 14px;border-radius:999px}
+  .actions{border-radius:12px;background:#f6ebcb}
+  .paginator{border-radius:14px;background:#fffdf8}
+  #nav-sidebar{background:#fffdf8;border-right:1px solid #f1e6d6}
+
+  /* --- Formularios --- */
+  fieldset.module{border-radius:18px}
+  .inline-group{border-radius:18px;overflow:hidden}
+  .submit-row{background:#fffdf8;border:1px solid #f1e6d6;border-radius:18px;box-shadow:var(--sombra);padding:14px 18px}
+  .button,input[type=submit],input[type=button],.submit-row input,a.button{border-radius:999px;font-weight:500;padding:9px 20px;transition:transform .25s,background .25s}
+  .button:hover,input[type=submit]:hover,a.button:hover{transform:translateY(-1px)}
+  .object-tools a{border-radius:999px;color:#3b2418;font-weight:500}
+  input[type=text],input[type=number],input[type=password],input[type=email],input[type=url],input[type=datetime-local],input[type=date],input[type=time],select,textarea{border-radius:10px;border:1.5px solid #f1e6d6;padding:8px 10px}
+  input:focus,select:focus,textarea:focus{border-color:#e9a3b3;outline:none;box-shadow:0 0 0 3px rgba(244,199,207,.5)}
+  ul.messagelist li{border-radius:12px;margin:10px 30px 0}
+
+  /* --- Inicio con tarjetas de resumen --- */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:12px;margin:4px 0 24px}
+  .kpi{background:#fffdf8;border-radius:18px;padding:16px 18px;border:1px solid #f1e6d6;border-left:6px solid var(--c);box-shadow:var(--sombra);transition:transform .35s,box-shadow .35s}
+  .kpi:hover{transform:translateY(-4px);box-shadow:0 20px 30px -10px rgba(59,36,24,.25)}
+  .kpi b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:2rem;line-height:1.1;color:#3b2418}
+  .kpi span{font-size:.82rem;color:#8a7263}
+
+  /* --- Pantalla de acceso --- */
+  body.login{display:grid;place-items:center;min-height:100vh;background:radial-gradient(55% 45% at 85% 5%,rgba(244,199,207,.7),transparent 70%),radial-gradient(45% 45% at 5% 95%,rgba(201,162,75,.25),transparent 70%),#fbf6ee}
+  .login #container{width:min(26em,calc(100% - 32px));margin:0;border:0;border-radius:28px;box-shadow:0 25px 50px -12px rgba(59,36,24,.35);overflow:hidden;background:#fffdf8}
+  .login #header{justify-content:center;text-align:center;padding:26px 20px;box-shadow:none}
+  .login #site-name a{font-size:1.6rem}
+  .login #content{padding:26px 30px 30px}
+  .login .form-row label{font-weight:500;color:#5a3a28}
+  .login .form-row input{width:100%}
+  .login .submit-row{padding:0;border:0;box-shadow:none;background:transparent;margin-top:18px}
+  .login .submit-row input{width:100%;padding:12px;font-size:1rem}
+</style>
+{% endblock %}
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">✦ Dulce Arte · Administración</a></div>
+{% endblock %}
+{% block nav-global %}{% endblock %}

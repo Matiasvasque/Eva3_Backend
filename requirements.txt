@@ -1,0 +1,16 @@
+# --- Núcleo ---
+Django>=5.0,<5.3
+djangorestframework>=3.15
+drf-spectacular>=0.27      # documentación /api/docs/ (solo administradores)
+# --- Base de datos / config ---
+psycopg2-binary>=2.9
+python-dotenv>=1.0
+# --- Frontend / CORS ---
+django-cors-headers>=4.3
+# --- Seguridad: bloqueo tras intentos fallidos de login ---
+django-axes>=7.0
+# --- Imágenes (ImageField del comprobante fotográfico) ---
+Pillow>=10.0
+# --- Producción en AWS EC2 ---
+gunicorn>=22.0
+whitenoise>=6.6   # (extra) sirve /static/ (incluye CSS del admin) detrás de gunicorn sin nginx
